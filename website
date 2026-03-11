@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Surge — AI Literacy for Schools</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --b50:#EFF8FF;--b100:#DBEFFE;--b200:#BAE3FD;--b300:#7DCAFB;--b400:#39AEF5;
+  --b500:#1093D9;--b600:#0474B5;--b700:#055D92;--b800:#094E79;--b900:#0D3F63;
+  --navy:#0A2540;--white:#fff;--slate:#F4F8FC;--slate2:#E1EAF4;
+  --text:#0A2540;--muted:#5C7EA8;--success:#10B981;--warn:#F59E0B;--danger:#EF4444;
+  --shadow:0 1px 3px rgba(10,37,64,.06),0 4px 16px rgba(10,37,64,.06);
+  --shadowmd:0 4px 24px rgba(10,37,64,.14)
+}
+body{font-family:'Poppins',sans-serif;background:var(--b50);color:var(--text);font-size:14px;overflow-x:hidden}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+#app{min-height:unset;height:100vh;overflow:hidden}#app.active{display:flex!important}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;border:none;font-family:'Poppins',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;letter-spacing:.01em}
+.btn-primary{background:var(--b500);color:#fff}.btn-primary:hover{background:var(--b600);transform:translateY(-1px)}
+.btn-secondary{background:var(--b100);color:var(--b700)}.btn-secondary:hover{background:var(--b200)}
+.btn-ghost{background:transparent;color:var(--b500);border:2px solid var(--b500)}.btn-ghost:hover{background:var(--b500);color:#fff}
+.btn-ghostw{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.45)}.btn-ghostw:hover{background:rgba(255,255,255,.12)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-sm{padding:7px 14px;font-size:12px;border-radius:8px}
+.btn-full{width:100%;justify-content:center}
+
+/* CARD */
+.card{background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--b100)}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+
+/* PROGRESS */
+.pbw{background:var(--b100);border-radius:99px;overflow:hidden}
+.pbf{height:100%;border-radius:99px;transition:width .5s ease}
+
+/* ── LANDING ── */
+#landing{background:#fff}
+.nav{background:var(--navy);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:70px;position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;text-decoration:none}
+.nav-logo img{height:40px;width:auto}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-link{color:rgba(255,255,255,.65);font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;transition:color .2s}
+.nav-link:hover{color:#fff}
+
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#0D3F63 55%,#094E79 100%);padding:100px 48px 80px;text-align:center;position:relative;overflow:hidden}
+.hero-dots{position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle at 2px 2px,white 1px,transparent 0);background-size:40px 40px;pointer-events:none}
+.hero-chip{display:inline-block;background:rgba(16,147,217,.25);border:1px solid rgba(16,147,217,.5);border-radius:99px;padding:6px 20px;margin-bottom:24px}
+.hero-chip span{color:var(--b300);font-size:12px;font-weight:700;letter-spacing:.07em}
+.hero h1{color:#fff;font-size:54px;line-height:1.1;margin:0 auto 22px;max-width:800px;font-weight:800;letter-spacing:-.02em}
+.hero h1 em{color:var(--b300);font-style:normal}
+.hero p{color:rgba(255,255,255,.65);font-size:19px;max-width:560px;margin:0 auto 40px;line-height:1.7;font-weight:400}
+.hero-btns{display:flex;gap:14px;justify-content:center}
+.hero-stats{margin-top:52px;display:flex;justify-content:center;gap:60px}
+.hstat-val{color:#fff;font-size:28px;font-weight:800}
+.hstat-lbl{color:rgba(255,255,255,.45);font-size:12px;margin-top:2px;font-weight:500}
+
+.topics-sec{padding:52px 48px;background:var(--b50);text-align:center}
+.topics-lbl{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+.topics-pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:720px;margin:0 auto}
+.pill{background:#fff;border:1px solid var(--b200);border-radius:99px;padding:8px 20px;font-size:13px;font-weight:600;color:var(--navy);transition:all .2s}
+.pill:hover{border-color:var(--b500);color:var(--b600)}
+
+.features-sec{padding:80px 48px;max-width:1100px;margin:0 auto}
+.features-sec h2{font-size:38px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:10px}
+.feat-sub{color:var(--muted);font-size:17px;text-align:center;margin-bottom:48px}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.feat-card{background:#fff;border-radius:16px;padding:28px;box-shadow:var(--shadow);border:1px solid var(--b100);transition:all .2s}
+.feat-card:hover{transform:translateY(-3px);box-shadow:var(--shadowmd)}
+.feat-icon{font-size:30px;margin-bottom:14px}
+.feat-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+.roles-sec{background:var(--b50);padding:80px 48px}
+.roles-sec h2{font-size:36px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:44px}
+.roles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1100px;margin:0 auto}
+.role-card{background:#fff;border-radius:16px;padding:26px;box-shadow:var(--shadow);border:2px solid transparent;text-align:center;transition:all .2s}
+.role-card:hover{border-color:var(--b300);transform:translateY(-2px)}
+.role-icon{font-size:34px;margin-bottom:12px}
+.role-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.role-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+.cta-sec{background:linear-gradient(135deg,var(--navy),#0D3F63);padding:80px 48px;text-align:center}
+.cta-sec h2{color:#fff;font-size:36px;font-weight:800;margin-bottom:14px}
+.cta-sec p{color:rgba(255,255,255,.55);font-size:17px;margin-bottom:34px}
+
+/* ── LOGIN ── */
+#login{background:linear-gradient(135deg,var(--navy),#0D3F63);display:flex;align-items:center;justify-content:center;padding:20px}
+.login-wrap{width:440px}
+.login-hdr{text-align:center;margin-bottom:26px}
+.login-hdr img{height:54px;width:auto;margin-bottom:12px;filter:brightness(0) invert(1)}
+.login-hdr p{color:rgba(255,255,255,.55);font-size:13px;margin-top:6px}
+.login-card{background:#fff;border-radius:18px;padding:34px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.role-sel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.rsel-btn{padding:10px 4px;border-radius:9px;border:2px solid var(--b100);background:transparent;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Poppins',sans-serif}
+.rsel-btn:hover{border-color:var(--b300);color:var(--b500)}
+.rsel-btn.active{border-color:var(--b500);background:var(--b50);color:var(--b600)}
+.flabel{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px}
+.finput{width:100%;padding:12px 14px;border-radius:9px;border:1.5px solid var(--b100);font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;color:var(--navy)}
+.finput:focus{border-color:var(--b400)}
+.fgroup{margin-bottom:16px}
+.login-foot{text-align:center;margin-top:14px;font-size:12px;color:var(--muted)}
+.login-foot a{color:var(--b500);font-weight:600;text-decoration:none;cursor:pointer}
+
+/* ── APP ── */
+.sidebar{width:235px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;height:100vh}
+.sb-hdr{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo{margin-bottom:14px}
+.sb-logo img{height:34px;width:auto;filter:brightness(0) invert(1)}
+.sb-user{border-radius:9px;padding:9px 11px}
+.sb-name{color:#fff;font-size:12px;font-weight:700}
+.sb-role{font-size:10px;font-weight:600}
+.sb-nav{flex:1;padding:12px 10px;overflow-y:auto}
+.nitem{display:flex;align-items:center;gap:10px;width:100%;padding:10px 11px;border-radius:9px;border:none;cursor:pointer;margin-bottom:3px;background:transparent;color:rgba(255,255,255,.5);font-weight:500;font-size:13px;font-family:'Poppins',sans-serif;transition:all .15s;text-align:left}
+.nitem:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9)}
+.nitem.active{background:rgba(16,147,217,.25);color:var(--b300);font-weight:700}
+.nicon{font-size:16px;flex-shrink:0}
+.sb-foot{padding:12px 10px;border-top:1px solid rgba(255,255,255,.08)}
+.so-btn{color:rgba(255,255,255,.3);background:none;border:none;cursor:pointer;font-size:12px;font-family:'Poppins',sans-serif;font-weight:500}
+.so-btn:hover{color:rgba(255,255,255,.7)}
+
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:#fff;border-bottom:1px solid var(--b100);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tb-left{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-weight:500}
+.tb-rbtn{padding:4px 11px;border-radius:7px;border:none;cursor:pointer;font-weight:600;font-size:11px;font-family:'Poppins',sans-serif;transition:all .15s}
+.tb-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.content{flex:1;overflow-y:auto;padding:28px;background:var(--b50)}
+
+/* ── VIEWS ── */
+.ph{margin-bottom:24px}
+.ptitle{font-size:24px;font-weight:800;color:var(--navy);margin-bottom:4px;letter-spacing:-.02em}
+.psub{color:var(--muted);font-size:13px}
+.sg{display:grid;gap:16px;margin-bottom:24px}
+.sg4{grid-template-columns:repeat(4,1fr)}
+.sc{background:#fff;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);border:1px solid var(--b100)}
+.si{display:flex;justify-content:space-between;align-items:flex-start}
+.slbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px}
+.sval{font-size:26px;font-weight:800;color:var(--navy);line-height:1}
+.ssub{font-size:11px;color:var(--muted);margin-top:5px}
+.sico{font-size:22px;border-radius:10px;padding:9px 10px}
+.tc{display:grid;gap:20px}
+.c32{grid-template-columns:3fr 2fr}.c21{grid-template-columns:2fr 1fr}.c11{grid-template-columns:1fr 1fr}
+.cstack{display:flex;flex-direction:column;gap:16px}
+.mg{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.li{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;border-radius:6px;transition:background .15s}
+.li:hover{background:var(--b50);padding-left:6px;margin-left:-6px;padding-right:6px;margin-right:-6px}
+.lchk{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0}
+
+.vplayer{background:var(--navy);border-radius:14px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-bottom:14px}
+.vbg{position:absolute;inset:0;background:linear-gradient(135deg,#0A2540,#094E79)}
+.pbtn{width:64px;height:64px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(4px);position:relative;z-index:1;transition:all .2s;border:none}
+.pbtn:hover{background:rgba(255,255,255,.28);transform:scale(1.06)}
+.pbtn span{font-size:26px;color:#fff;margin-left:4px}
+.vmeta{color:rgba(255,255,255,.6);font-size:12px;position:relative;z-index:1;margin-top:10px}
+.vprog{position:absolute;bottom:14px;left:14px;right:14px;z-index:1}
+.vbar{background:rgba(255,255,255,.18);border-radius:4px;height:4px;margin-bottom:6px}
+.vbarfill{width:35%;height:100%;background:var(--b400);border-radius:4px}
+.vtimes{display:flex;justify-content:space-between;color:rgba(255,255,255,.45);font-size:11px}
+
+.tbar{display:flex;gap:4px;background:var(--b100);padding:3px;border-radius:10px;margin-bottom:16px}
+.tbtn{flex:1;padding:9px 0;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-family:'Poppins',sans-serif;transition:all .2s}
+.tbtn.active{background:#fff;font-weight:700;color:var(--navy);box-shadow:0 1px 4px rgba(10,37,64,.1)}
+.tbtn:not(.active){background:transparent;color:var(--muted);font-weight:500}
+
+.qopt{padding:12px 14px;border-radius:9px;border:2px solid var(--b100);background:var(--b50);margin-bottom:8px;cursor:pointer;font-size:13px;font-family:'Poppins',sans-serif;color:var(--navy);transition:all .2s;font-weight:500}
+.qopt:hover{border-color:var(--b400)}
+.qopt.correct{border-color:var(--success);background:rgba(16,185,129,.1);color:var(--success);font-weight:700}
+.qopt.wrong{border-color:var(--danger);background:rgba(239,68,68,.1);color:var(--danger);font-weight:700}
+
+.dt{width:100%;border-collapse:collapse}
+.dt th{padding:12px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--b50)}
+.dt td{padding:12px 16px;border-top:1px solid var(--b100);font-size:13px}
+.savatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+
+.cms-tabs{display:flex;gap:6px;margin-bottom:20px}
+.ctab{padding:9px 18px;border-radius:9px;border:none;cursor:pointer;font-size:12px;font-family:'Poppins',sans-serif;text-transform:capitalize;font-weight:600;transition:all .2s}
+.sg2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.ss-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.ss{background:var(--b50);border-radius:8px;padding:9px;text-align:center}
+.ssv{font-weight:800;font-size:16px;color:var(--navy)}.ssl{font-size:10px;color:var(--muted)}
+
+.toggle{width:38px;height:22px;border-radius:99px;cursor:pointer;position:relative;border:none;transition:background .2s}
+.tthumb{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+
+.next-card{border-radius:14px;padding:20px;border:none}
+.actitem{font-size:11px;color:var(--muted);margin-bottom:8px;padding-bottom:8px}
+.actitem:not(:last-child){border-bottom:1px solid var(--b100)}
+.back-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.empty-st{text-align:center;padding:50px 0}
+.sinput{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--b100);font-size:13px;font-family:'Poppins',sans-serif;outline:none;margin-bottom:16px;background:#fff;color:var(--navy)}
+.sinput:focus{border-color:var(--b400)}
+.cdot{width:32px;height:32px;border-radius:50%;cursor:pointer;transition:transform .15s}
+.cdot:hover{transform:scale(1.1)}
+.cdot.sel{outline:3px solid var(--navy);outline-offset:2px}
+.qcomplete{text-align:center;padding:20px 0}
+.qscore{font-size:40px;font-weight:800}
+
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b200);border-radius:99px}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing" class="screen active">
+  <nav class="nav">
+    <a class="nav-logo" href="#"><img src="data:image/png;base64,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" alt="AI Surge"></a>
+    <div class="nav-links">
+      <a class="nav-link" onclick="document.querySelector('.features-sec').scrollIntoView({behavior:'smooth'})">How It Works</a>
+      <a class="nav-link" onclick="document.querySelector('.roles-sec').scrollIntoView({behavior:'smooth'})">For Schools</a>
+      <a class="nav-link" onclick="document.querySelector('.cta-sec').scrollIntoView({behavior:'smooth'})">Pricing</a>
+      <button class="btn btn-primary btn-sm" onclick="showScreen('login')">Log In →</button>
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="hero-dots"></div>
+    <div class="hero-chip"><span>🎓 BUILT FOR SCHOOLS · NZ &amp; AUSTRALIA</span></div>
+    <h1>AI Literacy for <em>Every Student</em></h1>
+    <p>Short, engaging video lessons that teach students how to use AI safely, wisely and responsibly.</p>
+    <div class="hero-btns">
+      <button class="btn btn-primary" style="font-size:15px;padding:14px 32px" onclick="showScreen('login')">Start Free Trial →</button>
+      <button class="btn btn-ghostw" style="font-size:15px;padding:14px 28px" onclick="watchDemo()">Watch Demo</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hstat-val">500+</div><div class="hstat-lbl">Students</div></div>
+      <div><div class="hstat-val">12+</div><div class="hstat-lbl">Schools</div></div>
+      <div><div class="hstat-val">40+</div><div class="hstat-lbl">Lessons</div></div>
+      <div><div class="hstat-val">4.9★</div><div class="hstat-lbl">Rating</div></div>
+    </div>
+  </section>
+  <section class="topics-sec">
+    <p class="topics-lbl">What Students Learn</p>
+    <div class="topics-pills">
+      <span class="pill">What is AI?</span><span class="pill">Prompting Well</span><span class="pill">Bias &amp; Hallucinations</span><span class="pill">Data Privacy</span><span class="pill">Academic Integrity</span><span class="pill">Checking AI Outputs</span><span class="pill">Copyright &amp; AI</span><span class="pill">Safe School Use</span>
+    </div>
+  </section>
+  <section class="features-sec">
+    <h2>Everything your school needs</h2>
+    <p class="feat-sub">One platform for students, teachers and school leaders.</p>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">🎬</div><div class="feat-title">Short Video Lessons</div><div class="feat-desc">Bite-sized 2–5 minute videos students actually watch and remember.</div></div>
+      <div class="feat-card"><div class="feat-icon">🧩</div><div class="feat-title">Structured Modules</div><div class="feat-desc">Organised pathways from AI basics to responsible advanced use.</div></div>
+      <div class="feat-card"><div class="feat-icon">✅</div><div class="feat-title">Quizzes &amp; Reflection</div><div class="feat-desc">Knowledge checks and reflection prompts built into every lesson.</div></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Teacher Dashboards</div><div class="feat-desc">Real-time class progress, completion rates and quiz performance.</div></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">Privacy by Design</div><div class="feat-desc">Built for schools — minimal data, secure access, compliant architecture.</div></div>
+      <div class="feat-card"><div class="feat-icon">📱</div><div class="feat-title">Works Everywhere</div><div class="feat-desc">Mobile, tablet and desktop — no app install needed, ever.</div></div>
+    </div>
+  </section>
+  <section class="roles-sec">
+    <h2>Built for Everyone in Your School</h2>
+    <div class="roles-grid">
+      <div class="role-card"><div class="role-icon">🎓</div><div class="role-title">Students</div><div class="role-desc">Watch lessons, take quizzes, track progress and earn completions.</div></div>
+      <div class="role-card"><div class="role-icon">👩‍🏫</div><div class="role-title">Teachers</div><div class="role-desc">Assign modules, monitor progress and identify who needs support.</div></div>
+      <div class="role-card"><div class="role-icon">🏫</div><div class="role-title">School Admins</div><div class="role-desc">Manage classes, upload content, view analytics and export reports.</div></div>
+      <div class="role-card"><div class="role-icon">⚡</div><div class="role-title">Super Admins</div><div class="role-desc">Oversee the entire platform, all schools and content from one place.</div></div>
+    </div>
+  </section>
+  <section class="cta-sec">
+    <h2>Ready to get your school AI-literate?</h2>
+    <p>Free 30-day trial. No credit card required.</p>
+    <button class="btn btn-primary" style="font-size:15px;padding:14px 36px" onclick="showScreen('login')">Get Started Free →</button>
+  </section>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="screen">
+  <div style="min-height:100vh;background:linear-gradient(135deg,var(--navy),#0D3F63);display:flex;align-items:center;justify-content:center;padding:20px">
+    <div class="login-wrap">
+      <div class="login-hdr">
+        <img src="data:image/png;base64,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" alt="AI Surge">
+        <p>Sign in to your learning account</p>
+      </div>
+      <div class="login-card">
+        <div class="fgroup">
+          <label class="flabel">I am a…</label>
+          <div class="role-sel">
+            <button class="rsel-btn active" data-role="student" onclick="selRole('student')">🎓 Student</button>
+            <button class="rsel-btn" data-role="teacher" onclick="selRole('teacher')">👩‍🏫 Teacher</button>
+            <button class="rsel-btn" data-role="admin" onclick="selRole('admin')">🏫 Admin</button>
+            <button class="rsel-btn" data-role="super" onclick="selRole('super')">⚡ Super</button>
+          </div>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Email</label>
+          <input id="lemail" class="finput" type="email" value="student@school.nz">
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Password</label>
+          <input class="finput" type="password" placeholder="Any password to demo">
+        </div>
+        <button class="btn btn-primary btn-full" style="padding:13px;font-size:14px;margin-top:4px" onclick="doLogin()">Sign In →</button>
+        <p class="login-foot">Forgot password? <a>Reset it</a> &nbsp;·&nbsp; <a onclick="showScreen('landing')">← Back to home</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="screen">
+  <aside class="sidebar">
+    <div class="sb-hdr">
+      <div class="sb-logo"><img src="data:image/png;base64,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" alt="AI Surge"></div>
+      <div class="sb-user" id="sb-user">
+        <div class="sb-name" id="sb-name">Aroha Ngata</div>
+        <div class="sb-role" id="sb-role">Student</div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-foot"><button class="so-btn" onclick="signOut()">↩ Sign Out</button></div>
+  </aside>
+  <div class="main-area">
+    <div class="topbar">
+      <div class="tb-left">
+        <span>Demo — switch role:</span>
+        <button class="tb-rbtn" onclick="switchRole('student')" data-role="student">Student</button>
+        <button class="tb-rbtn" onclick="switchRole('teacher')" data-role="teacher">Teacher</button>
+        <button class="tb-rbtn" onclick="switchRole('admin')" data-role="admin">Admin</button>
+        <button class="tb-rbtn" onclick="switchRole('super')" data-role="super">Super Admin</button>
+      </div>
+      <div class="tb-avatar" id="tb-av">AN</div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script>
+const MODULES=[
+  {id:1,title:"Foundations of AI",color:"#1093D9",icon:"🧠",lessons:[
+    {id:1,title:"What is AI?",dur:"3 min",done:true},
+    {id:2,title:"What is Generative AI?",dur:"4 min",done:true},
+    {id:3,title:"How AI Models Learn",dur:"5 min",done:false}
+  ]},
+  {id:2,title:"Safe & Smart Use",color:"#0474B5",icon:"🛡️",lessons:[
+    {id:4,title:"Data Privacy Basics",dur:"4 min",done:false},
+    {id:5,title:"Checking AI Accuracy",dur:"3 min",done:false},
+    {id:6,title:"Bias & Hallucinations",dur:"5 min",done:false}
+  ]},
+  {id:3,title:"Prompting Well",color:"#39AEF5",icon:"✍️",lessons:[
+    {id:7,title:"What Makes a Good Prompt?",dur:"4 min",done:false},
+    {id:8,title:"Prompt Strategies",dur:"5 min",done:false}
+  ]},
+  {id:4,title:"Academic Integrity",color:"#055D92",icon:"📚",lessons:[
+    {id:9,title:"Copyright & AI",dur:"3 min",done:false},
+    {id:10,title:"Academic Honesty",dur:"4 min",done:false}
+  ]}
+];
+const STUDENTS=[
+  {id:1,name:"Aroha Ngata",email:"aroha@school.nz",progress:80,last:"Today",quiz:92,mods:3},
+  {id:2,name:"James Chen",email:"james@school.nz",progress:55,last:"Yesterday",quiz:78,mods:2},
+  {id:3,name:"Mia Patel",email:"mia@school.nz",progress:100,last:"Today",quiz:97,mods:4},
+  {id:4,name:"Luca Ferreira",email:"luca@school.nz",progress:30,last:"3 days ago",quiz:65,mods:1},
+  {id:5,name:"Sophie Williams",email:"sophie@school.nz",progress:70,last:"Today",quiz:88,mods:3},
+  {id:6,name:"Noah Kim",email:"noah@school.nz",progress:45,last:"2 days ago",quiz:72,mods:2}
+];
+const SCHOOLS=[
+  {id:1,name:"Westview College",students:124,teachers:8,progress:68,plan:"Pro"},
+  {id:2,name:"Northgate Academy",students:89,teachers:5,progress:82,plan:"Pro"},
+  {id:3,name:"Riverside Primary",students:210,teachers:12,progress:41,plan:"Starter"},
+  {id:4,name:"Central High School",students:345,teachers:18,progress:57,plan:"Enterprise"}
+];
+const QUIZ=[
+  {q:"What does 'hallucination' mean in AI?",opts:["AI sees images","AI generates confident but false info","A training technique","Screen flickers"],c:1},
+  {q:"Best data privacy practice with AI tools?",opts:["Share your full name","Paste private student info","Avoid sharing sensitive data","Use same password everywhere"],c:2},
+  {q:"Best way to verify an AI-generated fact?",opts:["Ask the AI again","Trust if confident","Cross-check with reliable sources","Share on social media"],c:2}
+];
+const NAVS={
+  student:[{id:"dashboard",icon:"🏠",lbl:"My Learning"},{id:"modules",icon:"📚",lbl:"Modules"},{id:"lesson",icon:"🎬",lbl:"Watch Lesson"},{id:"progress",icon:"📈",lbl:"My Progress"}],
+  teacher:[{id:"dashboard",icon:"🏠",lbl:"Overview"},{id:"students",icon:"👥",lbl:"My Students"},{id:"assign",icon:"📋",lbl:"Assign Content"},{id:"reports",icon:"📊",lbl:"Reports"}],
+  admin:[{id:"dashboard",icon:"🏠",lbl:"Overview"},{id:"students",icon:"👥",lbl:"Students"},{id:"cms",icon:"✏️",lbl:"Content"},{id:"analytics",icon:"📊",lbl:"Analytics"},{id:"settings",icon:"⚙️",lbl:"Settings"}],
+  super:[{id:"dashboard",icon:"🏠",lbl:"Platform"},{id:"schools",icon:"🏫",lbl:"Schools"},{id:"cms",icon:"✏️",lbl:"CMS"},{id:"analytics",icon:"📊",lbl:"Analytics"},{id:"settings",icon:"⚙️",lbl:"Settings"}]
+};
+const RC={student:"#1093D9",teacher:"#39AEF5",admin:"#0474B5",super:"#055D92"};
+const RN={student:"Aroha Ngata",teacher:"Ms. Davies",admin:"Westview Admin",super:"Platform Admin"};
+const RL={student:"Student",teacher:"Teacher",admin:"School Admin",super:"Super Admin"};
+const RI={student:"AN",teacher:"TD",admin:"WA",super:"PA"};
+
+let role="admin",sec="cms",qs={step:0,sel:null,score:0,done:false},atab="summary",ctab="videos";
+let editingLesson=null;
+
+const pb=(v,c="#1093D9",h=8)=>`<div class="pbw" style="height:${h}px"><div class="pbf" style="width:${v}%;background:${c}"></div></div>`;
+const badge=(t,c)=>`<span class="badge" style="background:${c}20;color:${c}">${t}</span>`;
+const stat=(l,v,s,i,c)=>`<div class="sc"><div class="si"><div><div class="slbl">${l}</div><div class="sval">${v}</div>${s?`<div class="ssub">${s}</div>`:""}</div><div class="sico" style="background:${c}18">${i}</div></div></div>`;
+const ini=n=>n.split(" ").map(x=>x[0]).join("");
+
+function showScreen(id){
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.style.display='none';
+  });
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.add('active');
+  if(id==='app'){
+    el.style.display='flex';
+  } else {
+    el.style.display='block';
+  }
+}
+function selRole(r){
+  document.querySelectorAll('.rsel-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.rsel-btn[data-role="${r}"]`)?.classList.add('active');
+  document.getElementById('lemail').value=`${r}@school.nz`;
+}
+function doLogin(){
+  const b=document.querySelector('.rsel-btn.active');
+  role=b?b.dataset.role:'student';
+  sec='dashboard';ctab='videos';editingLesson=null;
+  qs={step:0,sel:null,score:0,done:false};atab='summary';
+  setupApp();showScreen('app');
+}
+function signOut(){showScreen('landing');}
+function switchRole(r){
+  role=r;sec='dashboard';ctab='videos';editingLesson=null;
+  qs={step:0,sel:null,score:0,done:false};atab='summary';
+  setupApp();
+}
+
+function setupApp(){
+  const c=RC[role];
+  const ub=document.getElementById('sb-user');ub.style.background=c+'28';
+  document.getElementById('sb-name').textContent=RN[role];
+  const re=document.getElementById('sb-role');re.textContent=RL[role];re.style.color=c;
+  document.getElementById('sb-nav').innerHTML=NAVS[role].map(n=>`
+    <button class="nitem ${sec===n.id?'active':''}" onclick="nav('${n.id}')"><span class="nicon">${n.icon}</span><span>${n.lbl}</span></button>`).join('');
+  const av=document.getElementById('tb-av');av.textContent=RI[role];av.style.background=c+'20';av.style.color=c;
+  document.querySelectorAll('.tb-rbtn').forEach(b=>{
+    const a=b.dataset.role===role;b.style.background=a?'var(--navy)':'var(--b100)';b.style.color=a?'#fff':'var(--muted)';
+  });
+  render();
+}
+function nav(s){sec=s;if(s!=='lesson'){qs={step:0,sel:null,score:0,done:false};atab='summary';}setupApp();}
+
+function render(){
+  const el=document.getElementById('content');let h='';
+  if(role==='student'){
+    if(sec==='dashboard')h=sDash();
+    else if(sec==='modules')h=sMods();
+    else if(sec==='lesson')h=sLesson();
+    else if(sec==='progress')h=sProgress();
+  }else if(role==='teacher'){
+    if(sec==='dashboard')h=tDash();
+    else if(sec==='students')h=sTable();
+    else if(sec==='assign')h=tAssign();
+    else if(sec==='reports')h=analytics();
+  }else{
+    if(sec==='dashboard')h=aDash();
+    else if(sec==='schools')h=schools();
+    else if(sec==='students')h=sTable();
+    else if(sec==='cms')h=cms();
+    else if(sec==='analytics')h=analytics();
+    else if(sec==='settings')h=settings();
+    else h=aDash();
+  }
+  el.innerHTML=h;el.scrollTop=0;
+}
+
+// ── STUDENT ──
+function sDash(){
+  return`<div class="ph"><h1 class="ptitle">Welcome back, Aroha 👋</h1><p class="psub">You're making great progress. Keep going!</p></div>
+  <div class="sg sg4">
+    ${stat("Lessons Done","5","of 10 total","✅","#1093D9")}${stat("Modules","2","in progress","📚","#0474B5")}
+    ${stat("Quiz Avg","88%","across 4 quizzes","🎯","#39AEF5")}${stat("Streak","4 days","Keep it up!","🔥","#055D92")}
+  </div>
+  <div class="tc c21">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3 style="font-size:15px;font-weight:700;color:var(--navy)">Your Modules</h3>
+        <button class="btn btn-secondary btn-sm" onclick="nav('modules')">View All</button>
+      </div>
+      ${MODULES.map(m=>{const d=m.lessons.filter(l=>l.done).length;const p=Math.round(d/m.lessons.length*100);return`
+        <div class="li" onclick="nav('lesson')" style="border-bottom:1px solid var(--b100);padding-bottom:12px;margin-bottom:12px">
+          <div style="width:40px;height:40px;background:${m.color}18;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${m.icon}</div>
+          <div style="flex:1"><div style="font-weight:600;color:var(--navy);font-size:13px;margin-bottom:5px">${m.title}</div>
+          ${pb(p,m.color)}<div style="font-size:11px;color:var(--muted);margin-top:3px">${d}/${m.lessons.length} · ${p}%</div></div>
+        </div>`;}).join('')}
+    </div>
+    <div class="cstack">
+      <div class="next-card" style="background:linear-gradient(135deg,#1093D9,#39AEF5)">
+        <div style="color:rgba(255,255,255,.7);font-size:10px;font-weight:700;letter-spacing:.07em;margin-bottom:6px">UP NEXT</div>
+        <div style="color:#fff;font-weight:700;font-size:14px;margin-bottom:3px">How AI Models Learn</div>
+        <div style="color:rgba(255,255,255,.65);font-size:12px;margin-bottom:14px">Foundations of AI · 5 min</div>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;border:none" onclick="nav('lesson')">▶ Continue →</button>
+      </div>
+      <div class="card">
+        <h3 style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px">Recent Activity</h3>
+        ${[["Completed quiz","Generative AI?","Today"],["Watched lesson","What is AI?","Yesterday"],["Started module","Foundations","2 days ago"]].map(([a,i,t])=>`
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+            <div><div style="font-size:12px;font-weight:600;color:var(--navy)">${a}</div><div style="font-size:11px;color:var(--muted)">${i}</div></div>
+            <span style="font-size:11px;color:var(--muted)">${t}</span>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function sMods(){
+  return`<div class="ph"><h1 class="ptitle">Learning Modules</h1><p class="psub">Complete all modules to finish the AI Literacy programme.</p></div>
+  <div class="mg">${MODULES.map(m=>{
+    const d=m.lessons.filter(l=>l.done).length;const p=Math.round(d/m.lessons.length*100);
+    const sc=p===100?"#10B981":p>0?"#F59E0B":"#94A3B8";const st=p===100?"Done":p>0?"In Progress":"Not Started";
+    return`<div class="card" style="padding:22px">
+      <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px">
+        <div style="width:48px;height:48px;background:${m.color}18;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${m.icon}</div>
+        <div style="flex:1"><div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:700;font-size:15px;color:var(--navy)">${m.title}</div>${badge(st,sc)}
+        </div><div style="font-size:11px;color:var(--muted);margin-top:3px">${m.lessons.length} lessons</div></div>
+      </div>
+      ${pb(p,m.color)}<div style="font-size:11px;color:var(--muted);margin:6px 0 14px">${d} of ${m.lessons.length} completed</div>
+      <div style="border-top:1px solid var(--b100);padding-top:14px">
+        ${m.lessons.map(l=>`<div class="li" onclick="nav('lesson')">
+          <div class="lchk" style="background:${l.done?"#10B981":"var(--b100)"}">${l.done?"✓":""}</div>
+          <div style="flex:1;font-size:12px;color:${l.done?"var(--muted)":"var(--navy)"};font-weight:${l.done?400:600}">${l.title}</div>
+          <div style="font-size:11px;color:var(--muted)">${l.dur}</div>
+        </div>`).join('')}
+      </div>
+      <div style="margin-top:14px"><button class="btn btn-primary btn-sm btn-full" onclick="nav('lesson')">${p===0?"▶ Start Module":p===100?"↩ Review":"▶ Continue →"}</button></div>
+    </div>`;}).join('')}</div>`;
+}
+
+function sLesson(){
+  const tabs={
+    summary:`<div class="card"><h3 style="color:var(--navy);font-weight:700;margin-bottom:10px">Lesson Summary</h3>
+      <p style="color:var(--muted);line-height:1.8;font-size:13px">In this lesson, we explore how AI models are trained using large datasets. You'll learn about machine learning, pattern recognition, and why the quality of training data matters.</p>
+      <p style="color:var(--muted);line-height:1.8;font-size:13px;margin-top:10px">We also cover supervised vs unsupervised learning, and explain why AI systems can make mistakes — especially when training data contains gaps or biases.</p></div>`,
+    takeaways:`<div class="card"><h3 style="color:var(--navy);font-weight:700;margin-bottom:14px">Key Takeaways</h3>
+      ${["AI learns by finding patterns in huge amounts of data.","The quality of training data directly affects AI accuracy.","AI can inherit biases from its training data.","Understanding how AI learns helps you use it more wisely."].map((t,i)=>`
+        <div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start">
+          <div style="width:24px;height:24px;background:var(--b100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--b600);flex-shrink:0">${i+1}</div>
+          <div style="font-size:13px;color:var(--navy);line-height:1.6;padding-top:3px">${t}</div>
+        </div>`).join('')}</div>`,
+    quiz:quizHTML()
+  };
+  return`<div class="back-row"><button class="btn btn-secondary btn-sm" onclick="nav('modules')">← Back</button>
+    <div><div style="font-size:11px;color:var(--muted)">Foundations of AI · Lesson 3</div>
+    <h1 style="font-size:20px;font-weight:800;color:var(--navy)">How AI Models Learn</h1></div>
+  </div>
+  <div class="tc c21">
+    <div>
+      <div class="vplayer"><div class="vbg"></div>
+        <div style="text-align:center;position:relative;z-index:1">
+          <button class="pbtn"><span>▶</span></button>
+          <div class="vmeta">5:00 · AI Surge Programme</div>
+        </div>
+        <div class="vprog"><div class="vbar"><div class="vbarfill"></div></div>
+        <div class="vtimes"><span>1:45</span><span>5:00</span></div></div>
+      </div>
+      <div class="tbar">
+        <button class="tbtn ${atab==='summary'?'active':''}" onclick="setTab('summary')">📋 Summary</button>
+        <button class="tbtn ${atab==='takeaways'?'active':''}" onclick="setTab('takeaways')">💡 Takeaways</button>
+        <button class="tbtn ${atab==='quiz'?'active':''}" onclick="setTab('quiz')">✅ Quiz</button>
+      </div>
+      ${tabs[atab]}
+    </div>
+    <div class="cstack">
+      <div class="card" style="background:linear-gradient(135deg,var(--navy),#0D3F63);border:none">
+        <div style="color:rgba(255,255,255,.5);font-size:10px;font-weight:700;letter-spacing:.06em;margin-bottom:6px">MODULE PROGRESS</div>
+        <div style="color:#fff;font-weight:600;font-size:13px;margin-bottom:10px">Foundations of AI</div>
+        ${pb(66,"#39AEF5")}<div style="color:rgba(255,255,255,.4);font-size:11px;margin-top:6px">2 of 3 lessons done</div>
+      </div>
+      <div class="card"><div style="font-weight:700;color:var(--navy);font-size:13px;margin-bottom:10px">Lessons</div>
+        ${MODULES[0].lessons.map(l=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b100)">
+          <div style="width:18px;height:18px;border-radius:50%;background:${l.done?"#10B981":l.id===3?"#1093D9":"var(--b100)"};display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0">${l.done?"✓":l.id===3?"▶":""}</div>
+          <div style="font-size:11px;color:${l.id===3?"var(--navy)":"var(--muted)"};font-weight:${l.id===3?600:400}">${l.title}</div>
+        </div>`).join('')}
+      </div>
+      <div class="card" style="background:var(--b50);border:1px solid var(--b200)">
+        <div style="font-size:18px;margin-bottom:6px">📥</div>
+        <div style="font-weight:700;color:var(--navy);font-size:12px;margin-bottom:3px">Study Guide</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">How AI Models Learn PDF</div>
+        <button class="btn btn-primary btn-sm" onclick="toast('📥 Study guide downloaded!')">Download</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function quizHTML(){
+  if(qs.done) return`<div class="card"><div class="qcomplete">
+    <div style="font-size:48px;margin-bottom:12px">${qs.score===3?"🎉":"👍"}</div>
+    <h3 style="color:var(--navy);font-size:20px;font-weight:800;margin-bottom:6px">Quiz Complete!</h3>
+    <div class="qscore" style="color:${qs.score===3?"#10B981":"#F59E0B"}">${qs.score}/${QUIZ.length}</div>
+    <p style="color:var(--muted);font-size:13px;margin:10px 0 20px">${qs.score===3?"Perfect score!":"Good effort! Review the summary and try again."}</p>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-secondary" onclick="qs={step:0,sel:null,score:0,done:false};setTab('quiz')">↩ Retry</button>
+      <button class="btn btn-primary" onclick="nav('modules')">Next Lesson →</button>
+    </div>
+  </div></div>`;
+  const q=QUIZ[qs.step];
+  return`<div class="card">
+    <div style="display:flex;justify-content:space-between;margin-bottom:14px">
+      <h3 style="color:var(--navy);font-weight:700">Knowledge Check</h3>
+      ${badge(`Q${qs.step+1} of ${QUIZ.length}`,"#0474B5")}
+    </div>
+    ${pb((qs.step/QUIZ.length)*100,"#1093D9")}
+    <p style="font-size:13px;font-weight:600;color:var(--navy);margin:16px 0 14px">${q.q}</p>
+    ${q.opts.map((o,i)=>{
+      let cls='qopt';
+      if(qs.sel!==null){if(i===q.c)cls+=' correct';else if(i===qs.sel)cls+=' wrong';}
+      return`<div class="${cls}" onclick="answerQ(${i})">${o}</div>`;
+    }).join('')}
+  </div>`;
+}
+
+function sProgress(){
+  return`<div class="ph"><h1 class="ptitle">My Progress</h1><p class="psub">Your learning journey across all modules.</p></div>
+  <div class="sg sg4">
+    ${stat("Total Progress","50%","5 of 10 lessons","📈","#1093D9")}${stat("Best Quiz","96%","Data Privacy","🏆","#0474B5")}
+    ${stat("Time This Week","42 min","","⏱️","#39AEF5")}${stat("Modules","2/4","in progress","🎯","#10B981")}
+  </div>
+  ${MODULES.map(m=>{const d=m.lessons.filter(l=>l.done).length;const p=Math.round(d/m.lessons.length*100);return`
+    <div class="card" style="margin-bottom:14px"><div style="display:flex;align-items:center;gap:14px">
+      <div style="width:40px;height:40px;background:${m.color}18;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">${m.icon}</div>
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-weight:600;color:var(--navy);font-size:13px">${m.title}</span>
+          <span style="font-weight:800;color:${m.color};font-size:13px">${p}%</span>
+        </div>
+        ${pb(p,m.color)}<div style="font-size:11px;color:var(--muted);margin-top:4px">${d} of ${m.lessons.length} lessons</div>
+      </div>
+    </div></div>`;}).join('')}`;
+}
+
+// ── TEACHER ──
+function tDash(){
+  return`<div class="ph"><h1 class="ptitle">Teacher Overview</h1><p class="psub">10Y Science — AI Literacy Programme</p></div>
+  <div class="sg sg4">
+    ${stat("Students","28","in your class","👥","#1093D9")}${stat("Avg Progress","63%","class average","📈","#0474B5")}
+    ${stat("Quiz Average","82%","","🎯","#39AEF5")}${stat("Need Support","3","below 50%","⚠️","#EF4444")}
+  </div>
+  <div class="tc c32">
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:16px">Student Progress</h3>
+      ${STUDENTS.map(s=>`<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="savatar" style="background:var(--b100);color:var(--b600)">${ini(s.name)}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;font-weight:600;color:var(--navy)">${s.name}</span>
+            <span style="font-size:11px;font-weight:700;color:${s.progress<50?"#EF4444":"#1093D9"}">${s.progress}%</span>
+          </div>
+          ${pb(s.progress,s.progress<50?"#EF4444":"#1093D9",6)}
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="cstack">
+      <div class="card" style="background:#FEF2F2;border:1px solid #FECACA">
+        <h3 style="color:var(--navy);font-weight:700;margin-bottom:12px">⚠️ Needs Attention</h3>
+        ${STUDENTS.filter(s=>s.progress<50).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div><div style="font-size:12px;font-weight:700;color:var(--navy)">${s.name}</div><div style="font-size:10px;color:var(--muted)">Last: ${s.last}</div></div>
+          <button class="btn btn-sm" style="background:#FEE2E2;color:#DC2626;font-size:11px;padding:5px 10px" onclick="sendReminder('${s.name}')">Remind</button>
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <h3 style="color:var(--navy);font-weight:700;margin-bottom:12px">Module Status</h3>
+        ${MODULES.map((m,i)=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span>${m.icon}</span>
+          <div style="flex:1"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:4px">${m.title}</div>${pb([72,45,28,15][i],m.color,6)}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function sTable(){
+  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <div><h1 class="ptitle">Students</h1><p class="psub">${STUDENTS.length} students enrolled</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openAddStudentModal()">+ Add Student</button>
+  </div>
+  <input class="sinput" placeholder="🔍  Search students…" oninput="filterS(this.value)">
+  <div class="card" style="padding:0;overflow:hidden">
+    <table class="dt"><thead><tr><th>Student</th><th>Progress</th><th>Quiz Avg</th><th>Modules</th><th>Last Active</th><th></th></tr></thead>
+    <tbody id="stbody">${sRows(STUDENTS)}</tbody></table>
+  </div>`;
+}
+function sRows(arr){return arr.map(s=>`<tr>
+  <td><div style="display:flex;align-items:center;gap:10px">
+    <div class="savatar" style="background:var(--b100);color:var(--b600)">${ini(s.name)}</div>
+    <div><div style="font-weight:600;font-size:13px;color:var(--navy)">${s.name}</div><div style="font-size:11px;color:var(--muted)">${s.email}</div></div>
+  </div></td>
+  <td style="min-width:140px"><div style="display:flex;align-items:center;gap:8px">
+    <div style="flex:1">${pb(s.progress,s.progress<50?"#EF4444":"#1093D9",6)}</div>
+    <span style="font-size:12px;font-weight:700;color:var(--navy)">${s.progress}%</span>
+  </div></td>
+  <td>${badge(s.quiz+"%",s.quiz>=85?"#10B981":s.quiz>=70?"#F59E0B":"#EF4444")}</td>
+  <td style="font-size:13px;color:var(--navy)">${s.mods}/4</td>
+  <td style="font-size:12px;color:var(--muted)">${s.last}</td>
+  <td><button class="btn btn-secondary btn-sm" onclick="viewStudent(${s.id})">View →</button></td>
+</tr>`).join('');}
+
+function tAssign(){
+  return`<div class="ph"><h1 class="ptitle">Assign Content</h1><p class="psub">Assign modules to your class or students.</p></div>
+  <div class="tc c11">
+    <div>
+      <h3 style="font-weight:700;color:var(--navy);margin-bottom:14px">Available Modules</h3>
+      ${MODULES.map(m=>`<div class="card" style="margin-bottom:12px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">${m.icon}</span>
+            <div><div style="font-weight:600;color:var(--navy);font-size:13px">${m.title}</div><div style="font-size:11px;color:var(--muted)">${m.lessons.length} lessons</div></div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="assignModule('${m.title}')">Assign →</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div>
+      <h3 style="font-weight:700;color:var(--navy);margin-bottom:14px">Assign To</h3>
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:10px">Whole Class</div>
+        <button class="btn btn-ghost btn-sm btn-full" onclick="assignWholeClass()">Assign to 10Y Science</button>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:10px">Individual Students</div>
+        ${STUDENTS.slice(0,4).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:13px;color:var(--navy)">${s.name}</span>
+          <button class="btn btn-secondary btn-sm" onclick="assignToStudent('${s.name}')">Select</button>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── ADMIN ──
+function aDash(){
+  const sup=role==='super';const items=sup?SCHOOLS:STUDENTS.slice(0,5);
+  return`<div class="ph"><h1 class="ptitle">${sup?"Platform Overview":"School Overview"}</h1><p class="psub">${sup?"All schools · Real-time":"Westview College"}</p></div>
+  <div class="sg sg4">
+    ${sup
+      ?stat("Schools","4","+1 this month","🏫","#1093D9")+stat("Students","768","all schools","👥","#0474B5")+stat("Avg Completion","62%","platform avg","📈","#39AEF5")+stat("Lessons","40","4 modules","📚","#055D92")
+      :stat("Students","124","at Westview","👥","#1093D9")+stat("Teachers","8","active","🎓","#0474B5")+stat("Avg Progress","68%","school avg","📈","#39AEF5")+stat("Classes","6","active","🏫","#055D92")}
+  </div>
+  <div class="tc c32">
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:16px">${sup?"Schools":"Class Progress"}</h3>
+      ${items.map(item=>`<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--b100);display:flex;align-items:center;justify-content:center;font-size:16px">${sup?"🏫":"👤"}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-weight:600;font-size:13px;color:var(--navy)">${item.name}</span>
+            <span style="font-weight:700;font-size:12px;color:var(--b500)">${item.progress}%</span>
+          </div>
+          ${pb(item.progress,"#1093D9",6)}
+          ${sup?`<div style="font-size:10px;color:var(--muted);margin-top:3px">${item.students} students · ${item.plan}</div>`:""}
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="cstack">
+      <div class="card">
+        <h3 style="color:var(--navy);font-weight:700;margin-bottom:12px">Quick Actions</h3>
+        ${(sup?["➕ Add School","📤 Upload Content","📊 Export Report","⚙️ Settings"]:["➕ Add Teacher","👥 Import Students","📋 Assign Module","📊 Export"]).map((l,i)=>`
+          <button class="btn btn-sm btn-full ${i===0?"btn-primary":"btn-secondary"}" style="margin-bottom:8px;justify-content:flex-start" onclick="quickAction('${l}')">${l}</button>`).join('')}
+      </div>
+      <div class="card" style="background:var(--b50);border:1px solid var(--b200)">
+        <h3 style="color:var(--navy);font-weight:700;margin-bottom:10px">📣 Recent Activity</h3>
+        ${["New school: Riverside joined","Module updated: Safe & Smart","12 students completed Module 1","Ms. Davies exported reports"].map(a=>`<div class="actitem">• ${a}</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function schools(){
+  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <div><h1 class="ptitle">Schools</h1><p class="psub">4 schools on the platform</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openAddSchoolModal()">+ Add School</button>
+  </div>
+  <div class="sg2">${SCHOOLS.map(s=>`<div class="card" style="padding:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="width:44px;height:44px;background:var(--b100);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🏫</div>
+        <div><div style="font-weight:700;color:var(--navy);font-size:14px">${s.name}</div><div style="font-size:11px;color:var(--muted)">Active school</div></div>
+      </div>
+      ${badge(s.plan,s.plan==="Enterprise"?"#0474B5":s.plan==="Pro"?"#1093D9":"#39AEF5")}
+    </div>
+    <div class="ss-row">
+      ${[["Students",s.students],["Teachers",s.teachers],["Progress",s.progress+"%"]].map(([l,v])=>`<div class="ss"><div class="ssv">${v}</div><div class="ssl">${l}</div></div>`).join('')}
+    </div>
+    ${pb(s.progress,"#1093D9")}
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="manageSchool(${s.id})">Manage</button>
+      <button class="btn btn-secondary btn-sm" onclick="schoolReport(${s.id})">Report</button>
+      <button class="btn btn-secondary btn-sm" onclick="manageSchool(${s.id})">⚙️</button>
+    </div>
+  </div>`).join('')}</div>`;
+}
+
+// Lesson video data store (survives re-renders)
+const LESSON_DATA = {};
+MODULES.forEach(m=>m.lessons.forEach(l=>{
+  LESSON_DATA[l.id]={
+    title:l.title, dur:l.dur, status:l.done?"live":"draft",
+    videoUrl:"", videoType:"youtube", summary:"", moduleId:m.id
+  };
+}));
+
+function cms(){
+  const tabs=["videos","modules","quizzes","resources"];
+  const tbar=`<div class="cms-tabs">${tabs.map(t=>`<button class="ctab" style="background:${ctab===t?"var(--navy)":"var(--b100)"};color:${ctab===t?"#fff":"var(--muted)"}" onclick="setCMS('${t}')">${t}</button>`).join('')}</div>`;
+  let c='';
+
+  if(ctab==='videos'){
+    // Check if editing a specific lesson
+    if(editingLesson!==null){
+      c=renderLessonEditor(editingLesson);
+    } else {
+      // Video overview — all lessons with video status
+      const allLessons = MODULES.flatMap(m=>m.lessons.map(l=>({...l,mod:m})));
+      const hasVideo = allLessons.filter(l=>LESSON_DATA[l.id].videoUrl);
+      const noVideo  = allLessons.filter(l=>!LESSON_DATA[l.id].videoUrl);
+      c=`
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+        <div class="card" style="flex:1;min-width:140px;text-align:center;padding:16px">
+          <div style="font-size:26px;font-weight:800;color:var(--navy)">${allLessons.length}</div>
+          <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em">Total Lessons</div>
+        </div>
+        <div class="card" style="flex:1;min-width:140px;text-align:center;padding:16px;background:#ECFDF5;border-color:#A7F3D0">
+          <div style="font-size:26px;font-weight:800;color:#10B981">${hasVideo.length}</div>
+          <div style="font-size:11px;color:#059669;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Videos Added</div>
+        </div>
+        <div class="card" style="flex:1;min-width:140px;text-align:center;padding:16px;background:#FEF3C7;border-color:#FDE68A">
+          <div style="font-size:26px;font-weight:800;color:#D97706">${noVideo.length}</div>
+          <div style="font-size:11px;color:#D97706;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Need Videos</div>
+        </div>
+      </div>
+
+      ${noVideo.length>0?`
+      <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:12px;padding:16px;margin-bottom:20px">
+        <div style="font-weight:700;color:#92400E;margin-bottom:4px;font-size:13px">⚠️ ${noVideo.length} lesson${noVideo.length>1?'s':''} still need a video URL</div>
+        <div style="font-size:12px;color:#A16207">Click "Add Video" on any lesson below to paste in a YouTube, Vimeo, or direct video URL.</div>
+      </div>`:''}
+
+      ${MODULES.map(m=>`
+        <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;padding:16px;background:${m.color}0D;border-bottom:1px solid ${m.color}25">
+            <div style="width:36px;height:36px;background:${m.color}20;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px">${m.icon}</div>
+            <div style="flex:1"><div style="font-weight:700;color:var(--navy);font-size:14px">${m.title}</div>
+              <div style="font-size:11px;color:var(--muted)">${m.lessons.filter(l=>LESSON_DATA[l.id].videoUrl).length} of ${m.lessons.length} videos added</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="addLessonToModule(${m.id})">+ Add Lesson</button>
+          </div>
+          <table class="dt" style="margin:0">
+            <thead><tr><th>#</th><th>Lesson Title</th><th>Duration</th><th>Video</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              ${m.lessons.map((l,i)=>{
+                const ld=LESSON_DATA[l.id];
+                const hasV=!!ld.videoUrl;
+                const vLabel=hasV?getVideoLabel(ld.videoUrl):'No video yet';
+                return`<tr>
+                  <td style="color:var(--muted);font-size:12px">${i+1}</td>
+                  <td style="font-weight:600;color:var(--navy)">${l.title}</td>
+                  <td><input style="width:70px;padding:5px 8px;border-radius:6px;border:1px solid var(--b200);font-size:12px;font-family:'Poppins',sans-serif" value="${l.dur}" onchange="LESSON_DATA[${l.id}].dur=this.value"></td>
+                  <td>
+                    ${hasV
+                      ?`<span style="color:#059669;font-size:12px;font-weight:600">✅ ${vLabel}</span>`
+                      :`<span style="color:#D97706;font-size:12px;font-weight:600">⚠️ No video</span>`
+                    }
+                  </td>
+                  <td>
+                    <select style="padding:4px 8px;border-radius:6px;border:1px solid var(--b200);font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;background:${ld.status==='live'?'#ECFDF5':'#FEF3C7'};color:${ld.status==='live'?'#059669':'#D97706'}" onchange="LESSON_DATA[${l.id}].status=this.value;render()">
+                      <option value="draft" ${ld.status==='draft'?'selected':''}>Draft</option>
+                      <option value="live"  ${ld.status==='live'?'selected':''}>Live</option>
+                    </select>
+                  </td>
+                  <td><button class="btn btn-primary btn-sm" onclick="editLesson(${l.id})">${hasV?'Edit':'Add Video'}</button></td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>`).join('')}`;
+    }
+
+  }else if(ctab==='modules'){
+    c=`<div class="mg">${MODULES.map(m=>`<div class="card">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+        <div style="width:40px;height:40px;background:${m.color}18;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">${m.icon}</div>
+        <div><div style="font-weight:700;font-size:14px;color:var(--navy)">${m.title}</div><div style="font-size:11px;color:var(--muted)">${m.lessons.length} lessons</div></div>
+      </div>
+      <div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" onclick="setCMS('videos')">Manage Videos</button><button class="btn btn-secondary btn-sm">+ Lesson</button></div>
+    </div>`).join('')}
+    <div class="card" style="display:flex;align-items:center;justify-content:center;border:2px dashed var(--b200);background:transparent;min-height:100px">
+      <button class="btn btn-ghost btn-sm" onclick="addModuleModal()">+ New Module</button>
+    </div></div>`;
+
+  }else if(ctab==='quizzes'){
+    c=QUIZ.map((q,i)=>`<div class="card" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="flex:1"><div style="font-weight:600;color:var(--navy);margin-bottom:8px;font-size:13px">Q${i+1}: ${q.q}</div>
+        ${q.opts.map((o,j)=>`<div style="font-size:12px;color:${j===q.c?"#10B981":"var(--muted)"};margin-bottom:3px">${j===q.c?"✓":"○"} ${o}</div>`).join('')}</div>
+        <div style="display:flex;gap:6px;margin-left:16px"><button class="btn btn-secondary btn-sm" onclick="editQuizQuestion(${i})">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteQuizQuestion(${i})">Del</button></div>
+      </div>
+    </div>`).join('')+`<button class="btn btn-ghost btn-sm btn-full" style="margin-top:8px" onclick="addQuizQuestion()">+ Add Question</button>`;
+
+  }else{
+    c=`<div class="card">
+      <h3 style="font-weight:700;color:var(--navy);margin-bottom:16px">📥 Resources &amp; Downloads</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Upload PDFs, worksheets and study guides that students can download alongside lessons.</p>
+      <div style="border:2px dashed var(--b200);border-radius:12px;padding:40px;text-align:center;background:var(--b50)">
+        <div style="font-size:40px;margin-bottom:12px">📂</div>
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Drag files here or click to upload</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:20px">PDF, DOCX, PPTX up to 50MB</div>
+        <button class="btn btn-primary" onclick="uploadContent()">Choose Files</button>
+      </div>
+    </div>`;
+  }
+
+  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <div><h1 class="ptitle">Content Management</h1><p class="psub">Add videos, manage modules, quizzes and resources</p></div>
+    ${editingLesson!==null?`<button class="btn btn-secondary btn-sm" onclick="editLesson(null)">← Back to all lessons</button>`:`<button class="btn btn-primary btn-sm" onclick="addContent()">+ Add Content</button>`}
+  </div>${editingLesson===null?tbar:''}${c}`;
+}
+
+function editLesson(id){
+  editingLesson=id;
+  ctab='videos';
+  render();
+  if(id!==null) setTimeout(()=>{ const el=document.getElementById('video-url-input'); if(el)el.focus(); },100);
+}
+
+function getVideoLabel(url){
+  if(!url) return '';
+  if(url.includes('youtube.com')||url.includes('youtu.be')) return 'YouTube';
+  if(url.includes('vimeo.com')) return 'Vimeo';
+  return 'Direct URL';
+}
+
+function getEmbedUrl(url){
+  if(!url) return '';
+  // YouTube
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  if(yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0&modestbranding=1`;
+  // Vimeo
+  const vi = url.match(/vimeo\.com\/(\d+)/);
+  if(vi) return `https://player.vimeo.com/video/${vi[1]}`;
+  return url;
+}
+
+function renderLessonEditor(lessonId){
+  const ld = LESSON_DATA[lessonId];
+  const mod = MODULES.find(m=>m.lessons.some(l=>l.id===lessonId));
+  const lesson = mod.lessons.find(l=>l.id===lessonId);
+  const embedUrl = getEmbedUrl(ld.videoUrl);
+  const hasV = !!ld.videoUrl;
+
+  return`
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:20px">
+    <div style="width:40px;height:40px;background:${mod.color}18;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">${mod.icon}</div>
+    <div>
+      <div style="font-size:11px;color:var(--muted)">${mod.title}</div>
+      <div style="font-size:18px;font-weight:800;color:var(--navy)">${lesson.title}</div>
+    </div>
+  </div>
+
+  <div class="tc c21">
+    <div>
+      <!-- VIDEO PREVIEW -->
+      <div style="background:var(--navy);border-radius:14px;aspect-ratio:16/9;overflow:hidden;margin-bottom:16px;position:relative">
+        ${hasV && embedUrl
+          ? `<iframe src="${embedUrl}" width="100%" height="100%" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%"></iframe>`
+          : `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,.4)">
+              <div style="font-size:48px;margin-bottom:12px">🎬</div>
+              <div style="font-weight:600;font-size:14px">No video added yet</div>
+              <div style="font-size:12px;margin-top:4px">Paste a URL below to preview</div>
+            </div>`
+        }
+      </div>
+
+      <!-- URL INPUT -->
+      <div class="card" style="margin-bottom:16px">
+        <h3 style="font-weight:700;color:var(--navy);margin-bottom:4px;font-size:14px">📹 Video URL</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Paste a YouTube, Vimeo, or direct .mp4 link. The video will embed automatically.</p>
+        <div style="display:flex;gap:8px">
+          <input id="video-url-input" class="finput" style="flex:1;margin:0" placeholder="https://www.youtube.com/watch?v=... or Vimeo link" value="${ld.videoUrl||''}" oninput="LESSON_DATA[${lessonId}].videoUrl=this.value">
+          <button class="btn btn-primary" onclick="previewVideo(${lessonId})">Preview ▶</button>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;color:var(--muted);font-weight:600">Supports:</span>
+          <span style="font-size:11px;background:var(--b100);color:var(--b700);padding:2px 9px;border-radius:99px;font-weight:600">YouTube</span>
+          <span style="font-size:11px;background:var(--b100);color:var(--b700);padding:2px 9px;border-radius:99px;font-weight:600">Vimeo</span>
+          <span style="font-size:11px;background:var(--b100);color:var(--b700);padding:2px 9px;border-radius:99px;font-weight:600">Direct .mp4</span>
+        </div>
+      </div>
+
+      <!-- LESSON DETAILS -->
+      <div class="card">
+        <h3 style="font-weight:700;color:var(--navy);margin-bottom:14px;font-size:14px">📝 Lesson Details</h3>
+        <div class="fgroup"><label class="flabel">Lesson Title</label>
+          <input class="finput" value="${lesson.title}" oninput="lesson.title=this.value">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="fgroup"><label class="flabel">Duration (e.g. 5 min)</label>
+            <input class="finput" value="${ld.dur}" oninput="LESSON_DATA[${lessonId}].dur=this.value">
+          </div>
+          <div class="fgroup"><label class="flabel">Status</label>
+            <select class="finput" style="cursor:pointer" onchange="LESSON_DATA[${lessonId}].status=this.value">
+              <option value="draft" ${ld.status==='draft'?'selected':''}>📝 Draft</option>
+              <option value="live"  ${ld.status==='live'?'selected':''}>🟢 Live</option>
+            </select>
+          </div>
+        </div>
+        <div class="fgroup"><label class="flabel">Lesson Summary (shown to students)</label>
+          <textarea class="finput" style="resize:vertical;min-height:90px;line-height:1.6" oninput="LESSON_DATA[${lessonId}].summary=this.value" placeholder="Write a short summary of what students will learn in this lesson…">${ld.summary||''}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="cstack">
+      <div class="card" style="background:linear-gradient(135deg,var(--navy),#0D3F63);border:none">
+        <div style="color:rgba(255,255,255,.55);font-size:10px;font-weight:700;letter-spacing:.06em;margin-bottom:10px">SAVE &amp; PUBLISH</div>
+        <button class="btn btn-primary btn-full" style="margin-bottom:8px;background:#10B981;font-size:13px" onclick="saveLesson(${lessonId},true)">🟢 Save &amp; Go Live</button>
+        <button class="btn btn-full" style="background:rgba(255,255,255,.12);color:#fff;font-size:13px" onclick="saveLesson(${lessonId},false)">💾 Save as Draft</button>
+        <div style="color:rgba(255,255,255,.35);font-size:11px;margin-top:10px">Last saved: just now</div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:13px">🧭 All Lessons in Module</h3>
+        ${mod.lessons.map((l,i)=>{
+          const isThis=l.id===lessonId;
+          const lv=LESSON_DATA[l.id].videoUrl;
+          return`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--b100);cursor:pointer" onclick="editLesson(${l.id})">
+            <div style="width:22px;height:22px;border-radius:50%;background:${isThis?"#1093D9":lv?"#10B981":"var(--b100)"};display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;flex-shrink:0">${isThis?"▶":lv?"✓":i+1}</div>
+            <div style="flex:1;font-size:12px;color:${isThis?"var(--b500)":"var(--navy)"};font-weight:${isThis?700:500}">${l.title}</div>
+            ${lv?`<span style="font-size:10px;color:#059669">●</span>`:`<span style="font-size:10px;color:#D97706">○</span>`}
+          </div>`;}).join('')}
+        <button class="btn btn-secondary btn-sm btn-full" style="margin-top:12px" onclick="addLessonToModule(${mod.id})">+ Add Lesson</button>
+      </div>
+
+      <div class="card" style="background:#EFF8FF;border:1px solid var(--b200)">
+        <h3 style="font-weight:700;color:var(--navy);margin-bottom:10px;font-size:13px">💡 Video Tips</h3>
+        ${["YouTube: use the full URL from your browser address bar","Vimeo: use the full vimeo.com/... URL","Private Vimeo videos won't embed — make them unlisted","Keep lessons under 8 minutes for best engagement"].map(t=>`
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;padding-left:10px;border-left:2px solid var(--b300)">
+            ${t}
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function previewVideo(id){
+  // Re-render to pick up the new URL from the input
+  const input = document.getElementById('video-url-input');
+  if(input) LESSON_DATA[id].videoUrl = input.value.trim();
+  render();
+}
+
+function saveLesson(id, goLive){
+  const input = document.getElementById('video-url-input');
+  if(input) LESSON_DATA[id].videoUrl = input.value.trim();
+  if(goLive) LESSON_DATA[id].status = 'live';
+  // Show toast
+  const toast = document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:12px 24px;border-radius:99px;font-weight:700;font-size:13px;font-family:Poppins,sans-serif;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2)';
+  toast.textContent = goLive ? '🟢 Lesson saved and published!' : '💾 Saved as draft';
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(), 2500);
+  editingLesson = null;
+  render();
+}
+
+function addLessonToModule(moduleId){
+  const m = MODULES.find(m=>m.id===moduleId);
+  const newId = Math.max(...MODULES.flatMap(m=>m.lessons.map(l=>l.id))) + 1;
+  const newLesson = {id:newId, title:"New Lesson", dur:"0 min", done:false};
+  m.lessons.push(newLesson);
+  LESSON_DATA[newId] = {title:"New Lesson", dur:"0 min", status:"draft", videoUrl:"", summary:"", moduleId};
+  editLesson(newId);
+}
+
+function showAddLesson(){ setCMS('videos'); }
+
+function analytics(){
+  return`<div class="ph"><h1 class="ptitle">Analytics</h1><p class="psub">${role==='super'?"Platform-wide data":"Westview College"}</p></div>
+  <div class="sg sg4">
+    ${stat("Lessons Completed","312","this month","✅","#1093D9")}${stat("Avg Session","8.4 min","per student","⏱️","#0474B5")}
+    ${stat("Quiz Pass Rate","84%",">70% threshold","🎯","#39AEF5")}${stat("Active This Week","89%","of students","📡","#10B981")}
+  </div>
+  <div class="tc c32">
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:18px">Module Completion Rates</h3>
+      ${MODULES.map((m,i)=>{const r=[78,55,34,22][i];return`<div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-weight:600;font-size:13px;color:var(--navy)">${m.icon} ${m.title}</span>
+          <span style="font-weight:700;font-size:13px;color:${m.color}">${r}%</span>
+        </div>${pb(r,m.color,10)}</div>`;}).join('')}
+    </div>
+    <div class="cstack">
+      <div class="card">
+        <h3 style="color:var(--navy);font-weight:700;margin-bottom:12px">Top Students</h3>
+        ${[...STUDENTS].sort((a,b)=>b.progress-a.progress).slice(0,4).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+          <span style="font-size:12px;color:var(--navy)">${s.name}</span>${badge(s.progress+"%","#10B981")}
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <h3 style="color:var(--navy);font-weight:700;margin-bottom:12px">Export Reports</h3>
+        ${["Progress by Student","Quiz Score Summary","Module Completion","Engagement Report"].map(r=>`<button class="btn btn-secondary btn-sm btn-full" style="margin-bottom:7px;justify-content:flex-start" onclick="exportCSV('${r.toLowerCase().replace(/ /g,'-')}.csv')">📊 ${r}</button>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function settings(){
+  return`<div class="ph"><h1 class="ptitle">Settings</h1></div>
+  <div class="tc c11">
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:14px">School Branding</h3>
+      <div class="fgroup"><label class="flabel">School Name</label><input id="school-name-input" class="finput" value="Westview College"></div>
+      <div class="fgroup"><label class="flabel">Accent Colour</label>
+        <div style="display:flex;gap:8px">
+          ${["#1093D9","#0474B5","#39AEF5","#055D92","#0A2540"].map((c,i)=>`<div class="cdot ${i===0?"sel":""}" style="background:${c}" onclick="document.querySelectorAll('.cdot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveSettings()">Save Changes</button>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:14px">Notifications</h3>
+      ${["Student completes a module","Quiz score below 60%","Student inactive 7+ days","New content available","Weekly progress summary"].map((n,i)=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:12px;color:var(--navy)">${n}</span>
+          <button class="toggle" style="background:${[0,2,4].includes(i)?"var(--b500)":"var(--b100)"}" onclick="toggleSetting(this)">
+            <div class="tthumb" style="left:${[0,2,4].includes(i)?19:3}px"></div>
+          </button>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:14px">Privacy &amp; Security</h3>
+      ${["Require email verification","Enforce SSO login","Enable admin audit log","Restrict to school domain"].map(p=>`
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;cursor:pointer" onclick="toggleCheckbox(this.querySelector('.pcheck'))">
+          <div class="pcheck" style="width:18px;height:18px;background:var(--b100);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--b600);font-weight:700;flex-shrink:0;border:1.5px solid var(--b300)">✓</div>
+          <span style="font-size:12px;color:var(--navy);user-select:none">${p}</span>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <h3 style="color:var(--navy);font-weight:700;margin-bottom:14px">Manage Access</h3>
+      <button class="btn btn-primary btn-sm btn-full" style="margin-bottom:8px" onclick="inviteTeacher()">Invite Teacher</button>
+      <button class="btn btn-secondary btn-sm btn-full" style="margin-bottom:8px" onclick="importStudents()">Import Students (CSV)</button>
+      <button class="btn btn-ghost btn-sm btn-full" onclick="managePermissions()">Manage Permissions</button>
+    </div>
+  </div>`;
+}
+
+function setTab(t){atab=t;render();}
+function setCMS(t){ctab=t;editingLesson=null;render();}
+
+function answerQ(idx){
+  if(qs.sel!==null)return;
+  qs.sel=idx;render();
+  setTimeout(()=>{
+    const correct=idx===QUIZ[qs.step].c;
+    const ns=qs.score+(correct?1:0);
+    if(qs.step+1>=QUIZ.length)qs={step:qs.step+1,sel:null,score:ns,done:true};
+    else qs={step:qs.step+1,sel:null,score:ns,done:false};
+    render();
+  },800);
+}
+
+function filterS(v){
+  const f=STUDENTS.filter(s=>s.name.toLowerCase().includes(v.toLowerCase()));
+  const el=document.getElementById('stbody');if(el)el.innerHTML=sRows(f);
+}
+
+// ─── TOAST ───
+function toast(msg,color='#10B981'){
+  const t=document.createElement('div');
+  t.style.cssText=`position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:${color};color:#fff;padding:13px 26px;border-radius:99px;font-weight:700;font-size:13px;font-family:'Poppins',sans-serif;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap`;
+  t.textContent=msg;document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400);},2200);
+}
+
+// ─── MODAL ───
+function showModal(title,html,onConfirm,confirmLabel='Save',confirmColor='btn-primary'){
+  let existing=document.getElementById('modal-overlay');if(existing)existing.remove();
+  const overlay=document.createElement('div');
+  overlay.id='modal-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(10,37,64,.55);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)';
+  overlay.innerHTML=`
+    <div style="background:#fff;border-radius:18px;padding:32px;width:100%;max-width:480px;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:modalIn .2s ease">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+        <h2 style="font-size:18px;font-weight:800;color:var(--navy)">${title}</h2>
+        <button onclick="closeModal()" style="background:var(--b100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;color:var(--muted)">×</button>
+      </div>
+      <div id="modal-body">${html}</div>
+      <div style="display:flex;gap:10px;margin-top:22px">
+        <button class="btn btn-secondary" style="flex:1" onclick="closeModal()">Cancel</button>
+        <button class="btn ${confirmColor}" style="flex:2" onclick="modalConfirm()">${confirmLabel}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+  window._modalConfirm=onConfirm;
+}
+function closeModal(){const o=document.getElementById('modal-overlay');if(o)o.remove();}
+function modalConfirm(){if(window._modalConfirm)window._modalConfirm();closeModal();}
+
+// ─── STUDENT MODAL ───
+function openAddStudentModal(){
+  showModal('Add New Student',`
+    <div class="fgroup"><label class="flabel">Full Name</label><input id="ns-name" class="finput" placeholder="e.g. Jordan Smith"></div>
+    <div class="fgroup"><label class="flabel">Email</label><input id="ns-email" class="finput" placeholder="jordan@school.nz"></div>
+    <div class="fgroup"><label class="flabel">Year Level</label>
+      <select id="ns-year" class="finput" style="cursor:pointer">
+        <option>Year 9</option><option>Year 10</option><option>Year 11</option><option>Year 12</option><option>Year 13</option>
+      </select>
+    </div>`,
+    ()=>{
+      const name=document.getElementById('ns-name').value.trim();
+      const email=document.getElementById('ns-email').value.trim();
+      if(!name){toast('Please enter a name','#EF4444');return;}
+      const newS={id:STUDENTS.length+1,name,email:email||name.toLowerCase().replace(' ','.')+`@school.nz`,progress:0,last:'Just now',quiz:0,mods:0};
+      STUDENTS.push(newS);render();toast('✅ Student added!');
+    },'Add Student');
+}
+
+// ─── VIEW STUDENT MODAL ───
+function viewStudent(id){
+  const s=STUDENTS.find(x=>x.id===id);if(!s)return;
+  showModal(`${s.name}`,`
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="width:56px;height:56px;background:var(--b100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--b600);margin:0 auto 10px">${ini(s.name)}</div>
+      <div style="color:var(--muted);font-size:13px">${s.email}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      ${[['Progress',s.progress+'%'],['Quiz Avg',s.quiz+'%'],['Modules',s.mods+'/4'],['Last Active',s.last]].map(([l,v])=>`
+        <div style="background:var(--b50);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-weight:800;font-size:18px;color:var(--navy)">${v}</div>
+          <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em">${l}</div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-bottom:4px"><label class="flabel">Overall Progress</label></div>
+    ${pb(s.progress,s.progress<50?'#EF4444':'#1093D9',10)}`,
+    ()=>toast(`Message sent to ${s.name}`),'Send Reminder','btn-primary');
+}
+
+// ─── SCHOOL MODAL ───
+function openAddSchoolModal(){
+  showModal('Add New School',`
+    <div class="fgroup"><label class="flabel">School Name</label><input id="sc-name" class="finput" placeholder="e.g. Auckland Grammar School"></div>
+    <div class="fgroup"><label class="flabel">Contact Email</label><input id="sc-email" class="finput" placeholder="principal@school.nz"></div>
+    <div class="fgroup"><label class="flabel">Plan</label>
+      <select id="sc-plan" class="finput" style="cursor:pointer">
+        <option>Starter</option><option selected>Pro</option><option>Enterprise</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="fgroup"><label class="flabel">Est. Students</label><input id="sc-students" class="finput" type="number" placeholder="100"></div>
+      <div class="fgroup"><label class="flabel">Est. Teachers</label><input id="sc-teachers" class="finput" type="number" placeholder="6"></div>
+    </div>`,
+    ()=>{
+      const name=document.getElementById('sc-name').value.trim();
+      if(!name){toast('Please enter a school name','#EF4444');return;}
+      SCHOOLS.push({id:SCHOOLS.length+1,name,students:parseInt(document.getElementById('sc-students').value)||0,teachers:parseInt(document.getElementById('sc-teachers').value)||0,progress:0,plan:document.getElementById('sc-plan').value});
+      render();toast('🏫 School added!');
+    },'Add School');
+}
+
+// ─── MANAGE SCHOOL MODAL ───
+function manageSchool(id){
+  const s=SCHOOLS.find(x=>x.id===id);if(!s)return;
+  showModal(`Manage: ${s.name}`,`
+    <div class="fgroup"><label class="flabel">School Name</label><input id="ms-name" class="finput" value="${s.name}"></div>
+    <div class="fgroup"><label class="flabel">Plan</label>
+      <select id="ms-plan" class="finput" style="cursor:pointer">
+        <option ${s.plan==='Starter'?'selected':''}>Starter</option>
+        <option ${s.plan==='Pro'?'selected':''}>Pro</option>
+        <option ${s.plan==='Enterprise'?'selected':''}>Enterprise</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="fgroup"><label class="flabel">Students</label><input id="ms-students" class="finput" type="number" value="${s.students}"></div>
+      <div class="fgroup"><label class="flabel">Teachers</label><input id="ms-teachers" class="finput" type="number" value="${s.teachers}"></div>
+    </div>`,
+    ()=>{
+      s.name=document.getElementById('ms-name').value||s.name;
+      s.plan=document.getElementById('ms-plan').value;
+      s.students=parseInt(document.getElementById('ms-students').value)||s.students;
+      s.teachers=parseInt(document.getElementById('ms-teachers').value)||s.teachers;
+      render();toast('✅ School updated!');
+    },'Save Changes');
+}
+
+// ─── SCHOOL REPORT MODAL ───
+function schoolReport(id){
+  const s=SCHOOLS.find(x=>x.id===id);if(!s)return;
+  showModal(`Report: ${s.name}`,`
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:36px;font-weight:800;color:var(--b500)">${s.progress}%</div>
+      <div style="font-size:12px;color:var(--muted)">Average completion across all students</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+      ${[['Students',s.students],['Teachers',s.teachers],['Plan',s.plan]].map(([l,v])=>`
+        <div style="background:var(--b50);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-weight:800;color:var(--navy)">${v}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:700">${l}</div>
+        </div>`).join('')}
+    </div>
+    ${pb(s.progress,'#1093D9',10)}`,
+    ()=>exportCSV(`report-${s.name.toLowerCase().replace(/ /g,'-')}.csv`,
+      'Metric,Value\nSchool,'+s.name+'\nStudents,'+s.students+'\nProgress,'+s.progress+'%'),
+    '📊 Export CSV');
+}
+
+// ─── INVITE TEACHER MODAL ───
+function inviteTeacher(){
+  showModal('Invite Teacher',`
+    <div class="fgroup"><label class="flabel">Full Name</label><input id="it-name" class="finput" placeholder="e.g. Ms. Johnson"></div>
+    <div class="fgroup"><label class="flabel">Email</label><input id="it-email" class="finput" placeholder="teacher@school.nz"></div>
+    <div class="fgroup"><label class="flabel">Subject / Class</label><input id="it-subject" class="finput" placeholder="e.g. 10Y Science"></div>`,
+    ()=>{
+      const email=document.getElementById('it-email').value.trim();
+      if(!email){toast('Please enter an email','#EF4444');return;}
+      toast(`📧 Invite sent to ${email}`);
+    },'Send Invite');
+}
+
+// ─── IMPORT STUDENTS MODAL ───
+function importStudents(){
+  showModal('Import Students via CSV',`
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Upload a CSV file with columns: <strong>name, email, year</strong></p>
+    <div style="border:2px dashed var(--b200);border-radius:10px;padding:28px;text-align:center;background:var(--b50);margin-bottom:14px">
+      <div style="font-size:32px;margin-bottom:8px">📂</div>
+      <div style="font-weight:600;color:var(--navy);margin-bottom:4px">Choose CSV file</div>
+      <div style="font-size:11px;color:var(--muted)">.csv format only</div>
+    </div>
+    <p style="font-size:11px;color:var(--muted)">Example row: <code style="background:var(--b50);padding:2px 6px;border-radius:4px">Jordan Smith,jordan@school.nz,Year 10</code></p>`,
+    ()=>toast('✅ 24 students imported successfully!'),'Import Students');
+}
+
+// ─── ADD TEACHER MODAL ───
+function addTeacher(){inviteTeacher();}
+
+// ─── ASSIGN MODULE MODAL ───
+function assignModuleModal(){
+  showModal('Assign Module to Class',`
+    <div class="fgroup"><label class="flabel">Select Module</label>
+      <select class="finput" style="cursor:pointer">
+        ${MODULES.map(m=>`<option>${m.icon} ${m.title}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fgroup"><label class="flabel">Assign To</label>
+      <select class="finput" style="cursor:pointer">
+        <option>All Classes</option><option>10Y Science</option><option>11B English</option>
+      </select>
+    </div>
+    <div class="fgroup"><label class="flabel">Due Date (optional)</label>
+      <input class="finput" type="date">
+    </div>`,
+    ()=>toast('📋 Module assigned to class!'),'Assign Module');
+}
+
+// ─── EXPORT CSV ───
+function exportCSV(filename='report.csv', content=''){
+  if(!content){
+    content='Student,Email,Progress,Quiz Avg,Modules,Last Active\n';
+    content+=STUDENTS.map(s=>`${s.name},${s.email},${s.progress}%,${s.quiz}%,${s.mods}/4,${s.last}`).join('\n');
+  }
+  const blob=new Blob([content],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+  toast('📊 Export downloaded!');
+}
+
+// ─── ADD QUESTION MODAL ───
+function addQuizQuestion(){
+  showModal('Add Quiz Question',`
+    <div class="fgroup"><label class="flabel">Question</label>
+      <textarea id="qq-q" class="finput" style="resize:vertical;min-height:70px" placeholder="Type your question here…"></textarea>
+    </div>
+    ${[0,1,2,3].map(i=>`
+      <div class="fgroup" style="display:flex;gap:8px;align-items:center">
+        <input type="radio" name="qq-correct" value="${i}" ${i===0?'checked':''} style="flex-shrink:0;accent-color:var(--b500)">
+        <input id="qq-opt${i}" class="finput" style="flex:1;margin:0" placeholder="Option ${i+1}">
+      </div>`).join('')}
+    <p style="font-size:11px;color:var(--muted);margin-top:6px">☝️ Select the radio button next to the correct answer</p>`,
+    ()=>{
+      const q=document.getElementById('qq-q').value.trim();
+      if(!q){toast('Please enter a question','#EF4444');return;}
+      const opts=[0,1,2,3].map(i=>document.getElementById(`qq-opt${i}`).value||`Option ${i+1}`);
+      const correct=parseInt(document.querySelector('input[name="qq-correct"]:checked').value);
+      QUIZ.push({q,opts,c:correct});render();toast('✅ Question added!');
+    },'Add Question');
+}
+
+// ─── EDIT QUIZ QUESTION MODAL ───
+function editQuizQuestion(idx){
+  const q=QUIZ[idx];
+  showModal('Edit Question',`
+    <div class="fgroup"><label class="flabel">Question</label>
+      <textarea id="eq-q" class="finput" style="resize:vertical;min-height:70px">${q.q}</textarea>
+    </div>
+    ${q.opts.map((o,i)=>`
+      <div class="fgroup" style="display:flex;gap:8px;align-items:center">
+        <input type="radio" name="eq-correct" value="${i}" ${i===q.c?'checked':''} style="flex-shrink:0;accent-color:var(--b500)">
+        <input id="eq-opt${i}" class="finput" style="flex:1;margin:0" value="${o}">
+      </div>`).join('')}`,
+    ()=>{
+      QUIZ[idx].q=document.getElementById('eq-q').value.trim()||q.q;
+      QUIZ[idx].opts=[0,1,2,3].map(i=>document.getElementById(`eq-opt${i}`).value||q.opts[i]);
+      QUIZ[idx].c=parseInt(document.querySelector('input[name="eq-correct"]:checked').value);
+      render();toast('✅ Question updated!');
+    },'Save Changes');
+}
+
+// ─── DELETE QUIZ QUESTION ───
+function deleteQuizQuestion(idx){
+  showModal('Delete Question','<p style="color:var(--muted)">Are you sure you want to delete this question? This cannot be undone.</p>',
+    ()=>{QUIZ.splice(idx,1);render();toast('🗑️ Question deleted','#EF4444');},'Delete','btn-danger');
+}
+
+// ─── ADD MODULE MODAL ───
+function addModuleModal(){
+  const colors=['#1093D9','#0474B5','#39AEF5','#055D92','#10B981','#F59E0B','#8B5CF6','#EF4444'];
+  const icons=['🧠','🛡️','✍️','📚','🔬','💡','🎯','🌐'];
+  showModal('New Module',`
+    <div class="fgroup"><label class="flabel">Module Title</label>
+      <input id="nm-title" class="finput" placeholder="e.g. AI in the Workplace"></div>
+    <div class="fgroup"><label class="flabel">Icon</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${icons.map((ic,i)=>`<button type="button" onclick="document.querySelectorAll('.icon-sel').forEach(b=>b.style.outline='none');this.style.outline='3px solid var(--b500)';document.getElementById('nm-icon').value='${ic}'" class="icon-sel" style="width:36px;height:36px;background:var(--b50);border:1px solid var(--b200);border-radius:8px;font-size:18px;cursor:pointer${i===0?';outline:3px solid var(--b500)':''}">${ic}</button>`).join('')}
+        <input id="nm-icon" type="hidden" value="🧠">
+      </div>
+    </div>
+    <div class="fgroup"><label class="flabel">Colour</label>
+      <div style="display:flex;gap:8px">
+        ${colors.map((c,i)=>`<div onclick="document.querySelectorAll('.col-sel').forEach(d=>d.style.outline='none');this.style.outline='3px solid var(--navy)';document.getElementById('nm-color').value='${c}'" class="col-sel" style="width:28px;height:28px;border-radius:50%;background:${c};cursor:pointer${i===0?';outline:3px solid var(--navy)':''}"></div>`).join('')}
+        <input id="nm-color" type="hidden" value="#1093D9">
+      </div>
+    </div>`,
+    ()=>{
+      const title=document.getElementById('nm-title').value.trim();
+      if(!title){toast('Please enter a module title','#EF4444');return;}
+      const newId=MODULES.length+1;
+      MODULES.push({id:newId,title,color:document.getElementById('nm-color').value,icon:document.getElementById('nm-icon').value,lessons:[]});
+      render();toast('✅ Module created!');
+    },'Create Module');
+}
+
+// ─── QUICK ACTIONS ───
+function quickAction(label){
+  if(label.includes('Add School')||label.includes('Add school'))openAddSchoolModal();
+  else if(label.includes('Upload Content'))uploadContent();
+  else if(label.includes('Export'))exportCSV();
+  else if(label.includes('Settings'))nav('settings');
+  else if(label.includes('Add Teacher'))addTeacher();
+  else if(label.includes('Import Students'))importStudents();
+  else if(label.includes('Assign Module'))assignModuleModal();
+}
+
+// ─── UPLOAD CONTENT ───
+function uploadContent(){
+  showModal('Upload Content',`
+    <div style="border:2px dashed var(--b200);border-radius:10px;padding:28px;text-align:center;background:var(--b50);margin-bottom:14px">
+      <div style="font-size:32px;margin-bottom:8px">📤</div>
+      <div style="font-weight:600;color:var(--navy);margin-bottom:4px">Choose file to upload</div>
+      <div style="font-size:11px;color:var(--muted)">PDF, MP4, DOCX, PPTX up to 500MB</div>
+    </div>
+    <div class="fgroup"><label class="flabel">Assign to Module</label>
+      <select class="finput" style="cursor:pointer">
+        <option>— Unassigned —</option>
+        ${MODULES.map(m=>`<option>${m.icon} ${m.title}</option>`).join('')}
+      </select>
+    </div>`,
+    ()=>toast('📤 File uploaded successfully!'),'Upload');
+}
+
+// ─── TOGGLE SETTINGS ───
+function toggleSetting(btn){
+  const on=btn.style.background==='var(--b500)'||btn.style.background.includes('16, 147, 217');
+  btn.style.background=on?'var(--b100)':'var(--b500)';
+  const thumb=btn.querySelector('.tthumb');
+  if(thumb)thumb.style.left=on?'3px':'19px';
+}
+
+// ─── SAVE SETTINGS ───
+function saveSettings(){
+  const name=document.getElementById('school-name-input')?.value;
+  if(name) toast('✅ Settings saved!');
+  else toast('✅ Settings saved!');
+}
+
+// ─── ASSIGN WHOLE CLASS ───
+function assignWholeClass(){
+  showModal('Assign to 10Y Science',`
+    <div class="fgroup"><label class="flabel">Select Module</label>
+      <select class="finput" style="cursor:pointer">
+        ${MODULES.map(m=>`<option>${m.icon} ${m.title}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fgroup"><label class="flabel">Due Date (optional)</label>
+      <input class="finput" type="date">
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">This will assign the module to all 28 students in 10Y Science.</p>`,
+    ()=>toast('📋 Module assigned to 10Y Science!'),'Assign');
+}
+
+// ─── ASSIGN INDIVIDUAL ───
+function assignToStudent(name){
+  showModal(`Assign to ${name}`,`
+    <div class="fgroup"><label class="flabel">Select Module</label>
+      <select class="finput" style="cursor:pointer">
+        ${MODULES.map(m=>`<option>${m.icon} ${m.title}</option>`).join('')}
+      </select>
+    </div>`,
+    ()=>toast(`📋 Module assigned to ${name}!`),'Assign');
+}
+
+// ─── MODULE ASSIGN (teacher) ───
+function assignModule(moduleTitle){
+  showModal(`Assign: ${moduleTitle}`,`
+    <div class="fgroup"><label class="flabel">Assign To</label>
+      <select class="finput" style="cursor:pointer">
+        <option>All Classes</option><option>10Y Science</option><option>11B English</option>
+      </select>
+    </div>
+    <div class="fgroup"><label class="flabel">Due Date (optional)</label>
+      <input class="finput" type="date">
+    </div>`,
+    ()=>toast(`📋 ${moduleTitle} assigned!`),'Assign');
+}
+
+// ─── STUDENT WATCH DEMO ───
+function watchDemo(){
+  showModal('Watch Demo',`<div style="background:var(--navy);border-radius:12px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:14px">
+    <div style="text-align:center;color:rgba(255,255,255,.5)">
+      <div style="font-size:48px;margin-bottom:8px">🎬</div>
+      <div style="font-size:13px">Demo video would play here</div>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--muted)">In the full platform, this would be a walkthrough video showing how AI Surge works for students, teachers and admins.</p>`,
+  ()=>{},'Close','btn-secondary');
+}
+
+// ─── MANAGE PERMISSIONS ───
+function managePermissions(){
+  showModal('Manage Permissions',`
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Control what each role can see and do in the platform.</p>
+    ${[['Teachers','Can assign modules, view student progress, export class reports'],
+       ['Students','Can watch lessons, take quizzes, view own progress only'],
+       ['School Admin','Full access to school data, cannot access other schools'],
+       ['Super Admin','Full platform access including all schools and billing']
+    ].map(([r,d])=>`
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--b100)">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--navy)">${r}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;max-width:280px">${d}</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="toast('Role config coming in full build')">Edit</button>
+      </div>`).join('')}`,
+    ()=>toast('✅ Permissions saved!'),'Save Changes');
+}
+
+// ─── PRIVACY CHECKBOX TOGGLE ───
+function toggleCheckbox(el){
+  const checked=el.textContent==='✓';
+  el.textContent=checked?'':' ✓';
+  el.style.background=checked?'transparent':'var(--b100)';
+}
+
+// ─── TEACHER SEND REMINDER (students need attention) ───
+function sendReminder(name){
+  toast(`📧 Reminder sent to ${name}`);
+}
+
+// ─── STUDENT: START / CONTINUE MODULE ───
+function startModule(moduleId){
+  nav('lesson');
+}
+
+// ─── ADD CONTENT (header button in CMS) ───
+function addContent(){
+  if(ctab==='videos') addLessonToModule(MODULES[0].id);
+  else if(ctab==='modules') addModuleModal();
+  else if(ctab==='quizzes') addQuizQuestion();
+  else uploadContent();
+}
+
+// Add CSS animation for modal (safe to call again)
+if(!document.getElementById('modal-style')){
+  const style=document.createElement('style');
+  style.id='modal-style';
+  style.textContent=`@keyframes modalIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`;
+  document.head.appendChild(style);
+}
+</script>
+</body>
+</html>
